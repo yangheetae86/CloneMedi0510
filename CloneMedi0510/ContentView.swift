@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        
+
         Home()
     }
 }
@@ -22,6 +22,9 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 struct Home : View {
+    @Environment(\.presentationMode) var presentationMode : Binding<PresentationMode>
+    
+    var isDestination = false
     
     @State var index = 1
     @State var offset : CGFloat = UIScreen.main.bounds.width
@@ -29,37 +32,42 @@ struct Home : View {
     
     var body: some View {
 
-        VStack(spacing: 0) {
-            AppBar(index: self.$index, offset: self.$offset)
-            
-            GeometryReader { g in
-                
-                HStack(spacing: 0){
-                    First()
-                        .frame(width: g.frame(in: .global).width)
-                    Scnd()
-                        .frame(width: g.frame(in: .global).width)
+            NavigationView {
+                ZStack {
+                    Color(.white).edgesIgnoringSafeArea(.all)
+                    VStack(spacing: 0) {
+                        AppBar(index: self.$index, offset: self.$offset)
+                        
+                        GeometryReader { g in
+                            
+                            HStack(spacing: 0){
+                                First()
+                                    .frame(width: g.frame(in: .global).width)
+                                Scnd()
+                                    .frame(width: g.frame(in: .global).width)
+                            }
+                            .offset(x: self.offset)
+                            .padding(.trailing, 410)
+                            .padding(.top)
+                            .highPriorityGesture(DragGesture() //Gesture 작동원리
+                            .onEnded({ (value) in
+                                
+                                if value.translation.width > 0{ //minimun drag..
+                                    print("right")
+                                    self.changeView(left: false)
+                                }
+                                else{
+                                    print("left")
+                                    self.changeView(left: true)
+                                }
+                            }))
+                            
+                        }
+                    }
                 }
-                .offset(x: self.offset)
-                .padding(.trailing, 410)
-                .padding(.top)
-                .highPriorityGesture(DragGesture() //Gesture 작동원리
-                .onEnded({ (value) in
-                    
-                    if value.translation.width > 0{ //minimun drag..
-                        print("right")
-                        self.changeView(left: false)
-                    }
-                    else{
-                        print("left")
-                        self.changeView(left: true)
-                    }
-                }))
-                
             }
-        }
-        .animation(.default)
-        .edgesIgnoringSafeArea(.all)
+            .animation(.default)
+            .edgesIgnoringSafeArea(.all)
     }
     
     func changeView(left: Bool){
@@ -83,6 +91,9 @@ struct Home : View {
 }
 
 struct AppBar : View {
+    @Environment(\.presentationMode) var presentationMode : Binding<PresentationMode>
+    
+    var isDestination = false
     
     @Binding var index : Int
     @Binding var offset : CGFloat
@@ -95,12 +106,11 @@ struct AppBar : View {
             HStack() {
                 Text("메디콜 공중전화")
                     Spacer()
-                Button(action: {
-                    
-                }) {
-                    Image(systemName: "gear")
-                        .font(/*@START_MENU_TOKEN@*/.headline/*@END_MENU_TOKEN@*/)
+                NavigationLink(destination:
+                    NoteMain(isDestination: true)) {
+                        Image(systemName: "gear")
                 }
+                
             }
             .foregroundColor(.white)
             .padding()
@@ -140,11 +150,9 @@ struct AppBar : View {
                     }
                 }
         }
-        .padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)! - 95)
-        .padding(.top, 100.0)
+//        .padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!-15)
         .padding(.bottom, 1)
         .background(Color("배경0"))
-        
     }
 }
 
@@ -159,11 +167,5 @@ struct First : View {
 struct Scnd : View {
     var body: some View {
         Text("통화내역이 없습니다")
-    }
-}
-
-struct Settings : View {
-    var body: some View {
-        Image(systemName: "star.fill")
     }
 }
