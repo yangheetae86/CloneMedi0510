@@ -27,6 +27,7 @@ struct NoteRow: View {
 
 struct NoteRow_Previews: PreviewProvider {
     static var previews: some View {
+//        NoteRow(note: ["",""])
         NoteRow(note: ["테스트","13:21","하하하하"])
     }
 }

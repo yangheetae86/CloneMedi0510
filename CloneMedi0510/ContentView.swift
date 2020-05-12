@@ -31,27 +31,30 @@ struct Home : View {
     var width = UIScreen.main.bounds.width
     
     var body: some View {
-
-            NavigationView {
-                ZStack {
-                    Color(.white).edgesIgnoringSafeArea(.all)
-                    VStack(spacing: 0) {
-                        AppBar(index: self.$index, offset: self.$offset)
+        
+        NavigationView {
+            
+            VStack(spacing: 0) {
+                Color("배경0").edgesIgnoringSafeArea(.all).frame(height: 0)
+                
+                AppBar(index: self.$index, offset: self.$offset)
+                
+                GeometryReader { g in
+                    
+                    HStack(spacing: 0){
+                        First()
+                            .frame(width: g.frame(in: .global).width)
+                        Scnd()
+                            .frame(width: g.frame(in: .global).width)
+                    }
+                    .offset(x: self.offset)
+                    .padding(.trailing, self.width)
+                    .padding(.top)
                         
-                        GeometryReader { g in
-                            
-                            HStack(spacing: 0){
-                                First()
-                                    .frame(width: g.frame(in: .global).width)
-                                Scnd()
-                                    .frame(width: g.frame(in: .global).width)
-                            }
-                            .offset(x: self.offset)
-                            .padding(.trailing, 410)
-                            .padding(.top)
-                            .highPriorityGesture(DragGesture() //Gesture 작동원리
-                            .onEnded({ (value) in
-                                
+                    .highPriorityGesture(
+                        
+                        DragGesture()//Gesture 작동원리
+                            .onEnded({ value in
                                 if value.translation.width > 0{ //minimun drag..
                                     print("right")
                                     self.changeView(left: false)
@@ -60,32 +63,27 @@ struct Home : View {
                                     print("left")
                                     self.changeView(left: true)
                                 }
-                            }))
-                            
-                        }
-                    }
+                            })
+                    )
                 }
             }
-            .animation(.default)
-            .edgesIgnoringSafeArea(.all)
+        }
+        .animation(.default)
+        .edgesIgnoringSafeArea(.all)
     }
     
     func changeView(left: Bool){
-        
-        if left {
-            if self.index != 0{
-                self.index -= 1
+        if left {// <- swipe
+            if self.index == 1 {
+                self.offset = 0
+                self.index = 2
             }
         }
-        
-        if self.index == 1{
-            self.offset = self.width
-        }
-        else if self.index == 2{
-            self.offset = 0
-        }
-        else {
-            self.offset = -self.width
+        else {// -> swipe
+            if self.index == 2 {
+                self.offset = self.width
+                self.index = 1
+            }
         }
     }
 }
@@ -102,19 +100,18 @@ struct AppBar : View {
     var body: some View {
         
         
-        VStack() {
-            HStack() {
+        VStack {
+            HStack {
                 Text("메디콜 공중전화")
-                    Spacer()
+                Spacer()
                 NavigationLink(destination:
                     NoteMain(isDestination: true)) {
                         Image(systemName: "gear")
                 }
-                
             }
             .foregroundColor(.white)
             .padding()
-            HStack{
+            HStack {
                     Button(action: {
                         
                         self.index = 1
@@ -122,10 +119,8 @@ struct AppBar : View {
                         
                     }) {
                         VStack(spacing: 8) {
-                            HStack(spacing: 12){
                                 Text("홈")
                                     .foregroundColor(self.index == 1 ? .white : Color.white.opacity(0.6))
-                            }
                             Capsule()
                                 .fill(self.index == 1 ? .yellow : Color.clear)
                                 .frame(height: 4)
@@ -139,10 +134,8 @@ struct AppBar : View {
                         
                     }) {
                         VStack(spacing: 8) {
-                            HStack(spacing: 12){
                                     Text("통화목록")
                                         .foregroundColor(self.index == 2 ? .white : Color.white.opacity(0.6))
-                            }
                             Capsule()
                                 .fill(self.index == 2 ? .yellow : Color.clear)
                                 .frame(height: 4)
@@ -150,7 +143,7 @@ struct AppBar : View {
                     }
                 }
         }
-//        .padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!-15)
+//        .padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!-35)
         .padding(.bottom, 1)
         .background(Color("배경0"))
     }

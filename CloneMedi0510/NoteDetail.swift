@@ -29,12 +29,13 @@ struct NoteDetail: View {
             Spacer()
         }
         .padding(.all, 20.0)
-        .navigationBarTitle(Text("설정"), displayMode: .inline)
+        .navigationBarTitle(Text("약관 및 정책"), displayMode: .inline)
     }
 }
 
 struct NoteDetail_Previews: PreviewProvider {
     static var previews: some View {
-        NoteDetail(note: ["테스트","13:21","오오오오"])
+        NoteDetail(note: ["테스트","00:04","내용2"])
+//        NoteDetail(note: ["테스트","13:21","오오오오"])
     }
 }
