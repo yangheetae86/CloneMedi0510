@@ -19,32 +19,43 @@ struct NoteMain: View {
                                 ["버전 정보", "Ver 1.0.0", ""]]
     
     var body: some View {
-        NavigationView {
+        
+    
+        GeometryReader { g in
             VStack {
-                Color("배경0").edgesIgnoringSafeArea(.all).frame(height: 0)
-                List{
-                    ForEach(notes, id: \.self){ note in
-                        NavigationLink(destination: NoteDetail(note: note)){
-                            NoteRow(note: note)
+
+                ZStack {
+                    Color("배경0").edgesIgnoringSafeArea(.all).frame(height:g.frame(in: .global).width/7)
+                    HStack {
+                        Text("설정")
+                    }.background(Color("배경0").edgesIgnoringSafeArea(.all))
+                    .padding()
+                    
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            
+                            
+                        }) {
+                            Text("취소")
                         }
                     }
-//                    .onDelete(perform: delete)
-//                    .onMove(perform: move)
+                    .padding()
                 }
-                    .navigationBarTitle(Text("설정"), displayMode: .inline)
-                .navigationBarItems(trailing: Button(action: {self.presentationMode.wrappedValue.dismiss()//
-                }) {
-                    Text("취소")
-                })
+                .foregroundColor(.white)
+                
+                List {
+                    Button(action:{
+                        NoteDetail(note: ["ss","ss","dd"])
+                    }
+                    ) {
+                        NoteRow(note: ["약관 및 정책",">"])
+                    }
+                    
+                }
             }
-//            .navigationBarTitle(Text("설정"), displayMode: .inline)
-//            .navigationBarItems(trailing: Button(action: {self.presentationMode.wrappedValue.dismiss()//
-//            }) {
-//                Text("취소")
-//            })
         }
     }
-// func 자리
 }
 
 struct NoteMain_Previews: PreviewProvider {

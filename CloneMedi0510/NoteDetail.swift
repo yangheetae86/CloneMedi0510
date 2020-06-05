@@ -10,13 +10,14 @@ import SwiftUI
 
 struct NoteDetail: View {
     
-    @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
-    var isDestination = false
+//    @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
+//    var isDestination = false
     
     @State var note: [String]
     
     var body: some View {
         VStack(alignment: .leading){
+//             Color("배경0").edgesIgnoringSafeArea(.all).frame(height: 100)
             HStack{
                 Text(note[0])
                     .font(.largeTitle)
@@ -28,7 +29,7 @@ struct NoteDetail: View {
             Text(note[2])
             Spacer()
         }
-        .padding(.all, 20.0)
+//        .padding(.all, 20.0)
         .navigationBarTitle(Text("약관 및 정책"), displayMode: .inline)
     }
 }

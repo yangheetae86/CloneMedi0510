@@ -17,6 +17,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
+        
         ContentView()
     }
 }
@@ -33,9 +34,8 @@ struct Home : View {
     var body: some View {
         
         NavigationView {
-            
             VStack(spacing: 0) {
-                Color("배경0").edgesIgnoringSafeArea(.all).frame(height: 0)
+//                Color("배경0").edgesIgnoringSafeArea(.all).frame(height: 0)
                 
                 AppBar(index: self.$index, offset: self.$offset)
                 
@@ -50,21 +50,20 @@ struct Home : View {
                     .offset(x: self.offset)
                     .padding(.trailing, self.width)
                     .padding(.top)
-                        
-                    .highPriorityGesture(
-                        
-                        DragGesture()//Gesture 작동원리
-                            .onEnded({ value in
-                                if value.translation.width > 0{ //minimun drag..
-                                    print("right")
-                                    self.changeView(left: false)
-                                }
-                                else{
-                                    print("left")
-                                    self.changeView(left: true)
-                                }
-                            })
-                    )
+                       
+                .highPriorityGesture(
+                    
+                    DragGesture()
+                    .onEnded({ value in
+                        if value.translation.width > 0 {
+                            print("right")
+                            self.changeView(left: false)
+                        }
+                        else {
+                            print("left")
+                            self.changeView(left: true)
+                        }
+                    }))
                 }
             }
         }
@@ -99,16 +98,16 @@ struct AppBar : View {
     
     var body: some View {
         
-        
         VStack {
+//            Color("배경0").edgesIgnoringSafeArea(.all).frame(height: 0)
             HStack {
                 Text("메디콜 공중전화")
                 Spacer()
-                NavigationLink(destination:
-                    NoteMain(isDestination: true)) {
+                NavigationLink(destination:NoteMain(isDestination: true)) {
                         Image(systemName: "gear")
                 }
             }
+//            .navigationBarBackButtonHidden(false)
             .foregroundColor(.white)
             .padding()
             HStack {
@@ -144,8 +143,8 @@ struct AppBar : View {
                 }
         }
 //        .padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!-35)
-        .padding(.bottom, 1)
-        .background(Color("배경0"))
+//        .padding(.bottom)
+        .background(Color("배경0").edgesIgnoringSafeArea(.all))
     }
 }
 

@@ -19,6 +19,7 @@ struct NoteRow: View {
             Text(note[0])
             Spacer()
             Text(note[1])
+                .foregroundColor(.gray)
         }
         .padding(.horizontal, 20.0)
         
